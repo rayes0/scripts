@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+# A cute, minimal fetch script that can display different animals
+# Inspired by elenapan's bunnyfetch (https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch)
+# Some code is taken from https://github.com/Luvella/bunnyfetch.sh/blob/master/bunnyfetch.sh
+# ASCII Art is modified from Christopher Johnson's ASCII Art Collection: https://asciiart.website
+
+LC_ALL=C
+LANG=C
+
+print_help() {
+	cat <<-'EOF'
+	Usage:
+	 cutefetch [ANIMAL]
+
+	Defaults to bunny if no animal specified.
+	
+	Avaliable animals:
+	 bunny
+	 kitten
+	 owl
+	 fish
+	 random (uses a random animal from the above list)
+	
+	Options:
+	 -h, --help     Print this message
+	 -c		Print configuration options
+
+	EOF
+	exit 1
+}
+print_config() {
+	cat <<-'EOF'
+	Configuration:
+	  cutefetch can be configured with the following environment variables:
+	  
+	CF_DEFAULT_ANIMAL=(ANIMAL)
+	  Sets the animal displayed by default if none are specified (default: bunny)
+
+	CF_MONOCHROME=(true|false)
+	  Renders output with only the fg and bg colors (default: false)
+
+	CF_BOLD=(true|false)
+	  Whether or not to use bold for label text (default: true)
+	
+	CF_TITLE=(true|false)
+	  Whether or not to display a title line (default: true)
+
+	EOF
+	exit 1
+}
+
+# System Info
+
+os() {
+	lsb_release -sd | cut -f2 -d \"
+}
+kernel() {
+	uname -r
+}
+wm() {
+	xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \"
+}
+shell() {
+	basename ${SHELL}
+}
+user() {
+	whoami
+}
+name() {
+	hostname
+}
+
+# Uptime, support for Mac and Linux, modified from https://gist.github.com/ioagel/7f72863b40ed3d7c3b1d60a4d1a081c1
+uptime -p >/dev/null 2>&1
+if [ "$?" -eq 0 ]; then
+	UP_SET_OR_EMPTY=$(uptime -p | awk -F 'up ' '{print $2}')
+	up() {
+		echo ${UP_SET_OR_EMPTY:-'less than a minute'}
+	}
+else
+	up() {
+		uptime | sed -E 's/^[^,]*up *//; s/mins/minutes/; s/hrs?/hours/;
+		s/([[:digit:]]+):0?([[:digit:]]+)/\1 hours, \2 minutes/;
+		s/^1 hours/1 hour/; s/ 1 hours/ 1 hour/;
+		s/min,/minutes,/; s/ 0 minutes,/ less than a minute,/; s/ 1 minutes/ 1 minute/;
+		s/  / /; s/, *[[:digit:]]* users?.*//'
+	}
+fi
+
+# Colors and formatting
+n=$'\033[0m' # Normal text
+
+BOLD="${CF_BOLD:-true}"
+if [ "$BOLD" = 'true' ]; then
+	b=$'\033[1m' # Bold text
+fi
+
+MONOCHROME="${CF_MONOCHROME:-false}"
+if [ "$MONOCHROME" = 'false' ]; then
+	c=3 cb=4
+	for j in c cb; do
+		for i in {0..7}; do
+		printf -v $j$i %b "\033[${!j}${i}m"
+	done
+	done
+fi
+
+# Dynamic underline
+TITLE="${CF_TITLE:-true}"
+if [ "$TITLE" = 'true' ]; then
+	title_num="$(user)$(name)"
+	length=$(expr ${#title_num} + 21)
+	line="$(printf -v spaces '%*s' $length ''; printf '%s\n' ${spaces// /-})"
+	cmd='cat'
+else
+	cmd="tail -n +3"
+fi
+
+# Animals
+bunny() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+	             $c2$b OS$n        $(os)
+	   (\\ /)     $c3$b WM$n        $(wm)
+	   ( . .)    $c4$b KERNEL$n    $(kernel)
+	   c$n($c4"$n)($c4"$n)   $c5$b SHELL$n     $(shell)
+	             $c6$b UPTIME$n    $(up)
+
+	EOF
+}
+kitten() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+	                $c2$b OS$n        $(os)
+	    ${c4}\\ $n   /\\     $c3$b WM$n        $(wm)
+	    ${c4} )$n  ( ')    $c4$b KERNEL$n    $(kernel)
+	    ${c4}( $n /  )     $c5$b SHELL$n     $(shell)
+	    ${c4} \\$n(__)$c4\\     $c6$b UPTIME$n    $(up)
+
+	EOF
+}
+owl() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+	                  $c2$b OS$n        $(os)
+	      ${c4}.___,       $c3$b WM$n        $(wm)
+	   ___('${c3}v${n}')___    $c4$b KERNEL$n    $(kernel)
+	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5$b SHELL$n     $(shell)
+	       ${c4}^ ^        $c6$b UPTIME$n    $(up)
+
+	EOF
+}
+fish() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+
+	     ${c4}\\ ${n}  '  o       $c2$b OS$n        $(os)
+	     ${c4}/\\    \\ ${n} '     $c3$b WM$n        $(wm)
+	   ${c3}>=)'${c4}>   /${c4}\\ ${n}  ~   $c4$b KERNEL$n    $(kernel)
+	     ${c4}\\/ ${c3} >=)'${c4}>      $c5$b SHELL$n     $(shell)
+	   ' ${c4}/     \\${c4}/       $c6$b UPTIME$n    $(up)
+	       o ${c4}  / ${n}  '
+
+	EOF
+}
+
+# Run functions
+tput rmam
+case $1 in
+	-h|--help)
+		print_help ;;
+	-c)
+		print_config ;;
+	bunny)
+		bunny
+		;;
+	kitten)
+		kitten ;;
+	owl)
+		owl ;;
+	fish)
+		fish ;;
+	random)
+		animals=(bunny kitten owl fish)
+		
+		num=${#animals[@]}
+		chosen=$(($RANDOM % $num))
+		${animals[$chosen]}
+		;;
+	"")
+		DEFANIMAL=${CF_DEFAULT_ANIMAL:-bunny}
+		$DEFANIMAL ;;
+	*)
+		cat <<-EOF
+		Invalid animal. See 'cutefetch -h' for help.
+
+		EOF
+esac
+tput smam
+
