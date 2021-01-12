@@ -1,6 +1,12 @@
 # cutefetch
 
-cutefetch is a cute and minimal system information tool written in bash. Similarly to other fetch tools, it will fetch some information about your system and display it in a visually pleasing way.
+cutefetch is a cute and minimal system information tool written in bash. Similarly to other fetch tools, it will fetch some information about your system and display it in a visually pleasing way beside an animal.
+
+<p align="middle">
+  <img src="previews/bunny.png" width="300" />
+  <img src="previews/owl.png" width="300" /> 
+  <img src="previews/fish.png" width="300" />
+</p>
 
 ## Install
 
