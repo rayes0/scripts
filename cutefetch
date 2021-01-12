@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# A cute, minimal fetch script that can display different animals
+#
+# cutefetch
+# https://github.com/rayes0/cutefetch
+# A cute and minimal fetch script that can display different animals
+
 # Inspired by elenapan's bunnyfetch (https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch)
 # Some code is taken from https://github.com/Luvella/bunnyfetch.sh/blob/master/bunnyfetch.sh
 # ASCII Art is modified from Christopher Johnson's ASCII Art Collection: https://asciiart.website
