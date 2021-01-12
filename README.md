@@ -11,7 +11,7 @@ cutefetch is just a bash script. To install it, just grab the file and put it so
 
 ## Usage
 
-```sh
+```
 Usage:
  cutefetch [ANIMAL]
 
