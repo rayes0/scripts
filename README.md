@@ -13,8 +13,6 @@ cutefetch is just a bash script. To install it, just grab the file and put it so
 
 The default behaviour of cutefetch can be configured with the environment variables. You may declare these either in a file run by bash on startup (eg: `~/.bashrc`), or manually using `export VARIABLE=VALUE`.
 
-Optionally, these variables may also be declared in a configuration file located at 
-
 ### Variables
 
 ```sh
