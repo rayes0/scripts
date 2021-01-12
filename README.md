@@ -9,6 +9,26 @@ cutefetch is a cute and minimal system information tool written in bash. Similar
 
 cutefetch is just a bash script. To install it, just grab the file and put it somewhere in your `$PATH`.
 
+## Usage
+
+```sh
+Usage:
+ cutefetch [ANIMAL]
+
+Defaults to bunny if no animal specified.
+
+Avaliable animals:
+ bunny
+ kitten
+ owl
+ fish
+ random (uses a random animal from the above list)
+
+Options:
+ -h, --help     Print this message
+ -c		Print configuration options
+```
+
 ## Configuration
 
 The default behaviour of cutefetch can be configured with the environment variables. You may declare these either in a file run by bash on startup (eg: `~/.bashrc`), or manually using `export VARIABLE=VALUE`.
