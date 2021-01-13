@@ -151,7 +151,7 @@ owl() {
 	   $n$line
 	                  $c2$b OS$n        $(os)
 	      ${c4}.___,       $c3$b WM$n        $(wm)
-	   ___('${c3}v${n}')___    $c4$b KERNEL$n    $(kernel)
+	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4$b KERNEL$n    $(kernel)
 	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5$b SHELL$n     $(shell)
 	       ${c4}^ ^        $c6$b UPTIME$n    $(up)
 

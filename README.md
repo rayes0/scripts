@@ -52,3 +52,8 @@ CF_BOLD=true
 CF_TITLE=true
 ```
 
+## Inspiration
+
+- ![elenapan's bunnyfetch](https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch)
+- ![Luvella's bunnyfetch](https://github.com/Luvella/Bunnyfetch)
+- ![neofetch](https://github.com/dylanaraps/neofetch) by dylanraps
