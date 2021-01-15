@@ -22,11 +22,13 @@ Avaliable animals:
  kitten
  owl
  fish
+ pika
  random (uses a random animal from the above list)
+ none (no animal, only displays system info)
 
 Options:
- -h, --help     Print this message
- -c		Print configuration options
+ -h, --help, help          Print this message
+ -c, --config, config      Print configuration options
 ```
 
 ## Configuration

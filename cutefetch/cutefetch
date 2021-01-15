@@ -23,11 +23,13 @@ print_help() {
 	 kitten
 	 owl
 	 fish
+	 pika
 	 random (uses a random animal from the above list)
+	 none (no animal, only displays system info)
 	
 	Options:
-	 -h, --help     Print this message
-	 -c		Print configuration options
+	 -h, --help, help          Print this message
+	 -c, --config, config      Print configuration options
 
 	EOF
 	exit 1
@@ -121,6 +123,18 @@ else
 fi
 
 # Animals
+none() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+	  $c2$b OS$n        $(os)
+	  $c3$b WM$n        $(wm)
+	  $c4$b KERNEL$n    $(kernel)
+	  $c5$b SHELL$n     $(shell)
+	  $c6$b UPTIME$n    $(up)
+
+	EOF
+}
 bunny() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
@@ -171,13 +185,25 @@ fish() {
 
 	EOF
 }
+pika() {
+	$cmd <<-EOF
+	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $n$line
+
+	  ${c2}(\\___/) ${c3}/___7   $c2$b OS$n        $(os)
+	  ${c2}(${c3}*${n}^_^${c3}*${c2}) ${c3}Z__7    $c3$b WM$n        $(wm)
+	   ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b KERNEL$n    $(kernel)
+	   ${c2}(/ \\)          $c5$b SHELL$n     $(shell)
+	                  $c6$b UPTIME$n    $(up)
+	EOF
+}
 
 # Run functions
 tput rmam
 case $1 in
-	-h|--help)
+	-h|--help|help)
 		print_help ;;
-	-c)
+	-c|--config|config)
 		print_config ;;
 	bunny)
 		bunny
@@ -188,6 +214,10 @@ case $1 in
 		owl ;;
 	fish)
 		fish ;;
+	pika)
+		pika ;;
+	none)
+		none ;;
 	random)
 		animals=(bunny kitten owl fish)
 		
