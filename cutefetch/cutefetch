@@ -52,6 +52,9 @@ print_config() {
 	CF_TITLE=(true|false)
 	  Whether or not to display a title line (default: true)
 
+	CF_LABELS=(upper|lower|title)
+	  Whether to display labels as uppercase, lowercase, or titlecase (default: upper)
+
 	EOF
 	exit 1
 }
@@ -123,90 +126,118 @@ else
 	cmd="tail -n +3"
 fi
 
+# Labels
+LCASE="${CF_LABELS:-upper}"
+usr=User
+hostnml=Hostname
+osl=OS
+wml=WM
+kernl=Kernel
+lshell=Shell
+utime=Uptime
+if [ "$LCASE" = 'upper' ]; then
+	usr=${usr^^}
+	hostnml=${hostnml^^}
+	osl=${osl^^}
+	wml=${wml^^}
+	kernl=${kernl^^}
+	lshell=${lshell^^}
+	utime=${utime^^}
+fi
+if [ "$LCASE" = 'lower' ]; then
+	usr=${usr,,}
+	hostnml=${hostnml,,}
+	osl=${osl,,}
+	wml=${wml,,}
+	kernl=${kernl,,}
+	lshell=${lshell,,}
+	utime=${utime,,}
+fi
+
 # Animals
 none() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	   $n$line
-	  $c2$b OS$n        $(os)
-	  $c3$b WM$n        $(wm)
-	  $c4$b KERNEL$n    $(kernel)
-	  $c5$b SHELL$n     $(shell)
-	  $c6$b UPTIME$n    $(up)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	   $c5$line
+	  $c2$b $osl$n        $(os)
+	  $c3$b $wml$n        $(wm)
+	  $c4$b $kernl$n    $(kernel)
+	  $c5$b $lshell$n     $(shell)
+	  $c6$b $utime$n    $(up)
 
 	EOF
 }
 bunny() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $c5$line
-	             $c2$b OS$n        $(os)
-	   (\\ /)     $c3$b WM$n        $(wm)
-	   ( . .)    $c4$b KERNEL$n    $(kernel)
-	   c$n($c4"$n)($c4"$n)   $c5$b SHELL$n     $(shell)
-	             $c6$b UPTIME$n    $(up)
+	             $c2$b $osl$n        $(os)
+	   (\\ /)     $c3$b $wml$n        $(wm)
+	   ( . .)    $c4$b $kernl$n    $(kernel)
+	   c$n($c4"$n)($c4"$n)   $c5$b $lshell$n     $(shell)
+	             $c6$b $utime$n    $(up)
 
 	EOF
 }
 kitten() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $c5$line
-	                $c2$b OS$n        $(os)
-	    ${c4}\\ $n   /\\     $c3$b WM$n        $(wm)
-	    ${c4} )$n  ( ')    $c4$b KERNEL$n    $(kernel)
-	    ${c4}( $n /  )     $c5$b SHELL$n     $(shell)
-	    ${c4} \\$n(__)$c4\\     $c6$b UPTIME$n    $(up)
+	                $c2$b $osl$n        $(os)
+	    ${c4}\\ $n   /\\     $c3$b $wml$n        $(wm)
+	    ${c4} )$n  ( ')    $c4$b $kernl$n    $(kernel)
+	    ${c4}( $n /  )     $c5$b $lshell$n     $(shell)
+	    ${c4} \\$n(__)$c4\\     $c6$b $utime$n    $(up)
 
 	EOF
 }
 owl() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $c5$line
-	                  $c2$b OS$n        $(os)
-	      ${c4}.___,       $c3$b WM$n        $(wm)
-	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4$b KERNEL$n    $(kernel)
-	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5$b SHELL$n     $(shell)
-	       ${c4}^ ^        $c6$b UPTIME$n    $(up)
+	                  $c2$b $osl$n        $(os)
+	      ${c4}.___,       $c3$b $wml$n        $(wm)
+	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4$b $kernl$n    $(kernel)
+	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5$b $lshell$n     $(shell)
+	       ${c4}^ ^        $c6$b $utime$n    $(up)
 
 	EOF
 }
 fish() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $c5$line
 
-	     ${c4}\\ ${n}  '  o       $c2$b OS$n        $(os)
-	     ${c4}/\\    \\ ${n} '     $c3$b WM$n        $(wm)
-	   ${c3}>=)'${c4}>   /${c4}\\ ${n}  ~   $c4$b KERNEL$n    $(kernel)
-	     ${c4}\\/ ${c3} >=)'${c4}>      $c5$b SHELL$n     $(shell)
-	   ' ${c4}/     \\${c4}/       $c6$b UPTIME$n    $(up)
+	     ${c4}\\ ${n}  '  o       $c2$b $osl$n        $(os)
+	     ${c4}/\\    \\ ${n} '     $c3$b $wml$n        $(wm)
+	   ${c3}>=)'${c4}>   /${c4}\\ ${n}  ~   $c4$b $kernl$n    $(kernel)
+	     ${c4}\\/ ${c3} >=)'${c4}>      $c5$b $lshell$n     $(shell)
+	   ' ${c4}/     \\${c4}/       $c6$b $utime$n    $(up)
 	       o ${c4}  / ${n}  '
 
 	EOF
 }
 pika() {
 	$cmd <<-EOF
-	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $c5$line
 
-	   ${c2}(\\___/) ${c3}/___7   $c2$b OS$n        $(os)
-	   ${c2}(${c1}o${n}^_^${c1}o${c2}) ${c3}Z__7    $c3$b WM$n        $(wm)
-	    ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b KERNEL$n    $(kernel)
-	    ${c2}(/ \\)          $c5$b SHELL$n     $(shell)
-	                   $c6$b UPTIME$n    $(up)
+	   ${c2}(\\___/) ${c3}/___7   $c2$b $osl$n        $(os)
+	   ${c2}(${c5}o${n}^_^${c5}o${c2}) ${c3}Z__7    $c3$b $wml$n        $(wm)
+	    ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b $kernl$n    $(kernel)
+	    ${c2}(/ \\)          $c5$b $lshell$n     $(shell)
+	                   $c6$b $utime$n    $(up)
 	EOF
 }
 puppy() {
 	$cmd <<-EOF
-	  $c5$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $c5$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
 	   $n$line
-	   ${c3}     __     ${c2}$b OS$n        $(os)
-	   ${c3}(___()${n}'${c3}\`;   $c3$b WM$n        $(wm)
-	   ${c3}/${n},    ${c3}/${c4}\`    $c4$b KERNEL$n    $(kernel)
-	   ${c3}\\\\${c2}"--${c3}\\\\     $c5$b SHELL$n     $(shell)
-	               $c6$b UPTIME$n    $(up)
+	   ${c3}     __     ${c2}$b $osl$n        $(os)
+	   ${c3}(___()${n}'${c3}\`;   $c3$b $wml$n        $(wm)
+	   ${c3}/${n},    ${c3}/${c4}\`    $c4$b $kernl$n    $(kernel)
+	   ${c3}\\\\${c2}"--${c3}\\\\     $c5$b $lshell$n     $(shell)
+	               $c6$b $utime$n    $(up)
 
 	EOF
 }

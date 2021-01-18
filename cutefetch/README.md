@@ -53,6 +53,10 @@ CF_BOLD=true
 # Whether or not to display a title line containing the name of the current user and hostname (default:true)
 # Valid: true|false
 CF_TITLE=true
+
+# Settings regarding whether labels are displayed in uppercase, lowercase, or titlecase (default:upper)
+# Valid: upper|lower|title
+CF_LABELS=upper
 ```
 
 ## Inspiration
