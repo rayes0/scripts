@@ -139,7 +139,7 @@ none() {
 bunny() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	   $n$line
+	   $c5$line
 	             $c2$b OS$n        $(os)
 	   (\\ /)     $c3$b WM$n        $(wm)
 	   ( . .)    $c4$b KERNEL$n    $(kernel)
@@ -151,7 +151,7 @@ bunny() {
 kitten() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	   $n$line
+	   $c5$line
 	                $c2$b OS$n        $(os)
 	    ${c4}\\ $n   /\\     $c3$b WM$n        $(wm)
 	    ${c4} )$n  ( ')    $c4$b KERNEL$n    $(kernel)
@@ -163,7 +163,7 @@ kitten() {
 owl() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	   $n$line
+	   $c5$line
 	                  $c2$b OS$n        $(os)
 	      ${c4}.___,       $c3$b WM$n        $(wm)
 	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4$b KERNEL$n    $(kernel)
@@ -175,7 +175,7 @@ owl() {
 fish() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	   $n$line
+	   $c5$line
 
 	     ${c4}\\ ${n}  '  o       $c2$b OS$n        $(os)
 	     ${c4}/\\    \\ ${n} '     $c3$b WM$n        $(wm)
@@ -189,24 +189,24 @@ fish() {
 pika() {
 	$cmd <<-EOF
 	  $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	  $n$line
+	   $c5$line
 
-	  ${c2}(\\___/) ${c3}/___7   $c2$b OS$n        $(os)
-	  ${c2}(${c3}*${n}^_^${c3}*${c2}) ${c3}Z__7    $c3$b WM$n        $(wm)
-	   ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b KERNEL$n    $(kernel)
-	   ${c2}(/ \\)          $c5$b SHELL$n     $(shell)
-	                  $c6$b UPTIME$n    $(up)
+	   ${c2}(\\___/) ${c3}/___7   $c2$b OS$n        $(os)
+	   ${c2}(${c1}o${n}^_^${c1}o${c2}) ${c3}Z__7    $c3$b WM$n        $(wm)
+	    ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b KERNEL$n    $(kernel)
+	    ${c2}(/ \\)          $c5$b SHELL$n     $(shell)
+	                   $c6$b UPTIME$n    $(up)
 	EOF
 }
 puppy() {
 	$cmd <<-EOF
-	 $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
-	  $n$line
-	  ${c3}     __     ${c2}$b OS$n        $(os)
-	  ${c3}(___()${n}'${c3}\`;   $c3$b WM$n        $(wm)
-	  ${c3}/${n},    ${c3}/${c4}\`    $c4$b KERNEL$n    $(kernel)
-	  ${c3}\\\\${c2}"--${c3}\\\\     $c5$b SHELL$n     $(shell)
-		              $c6$b UPTIME$n    $(up)
+	  $c5$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	   $n$line
+	   ${c3}     __     ${c2}$b OS$n        $(os)
+	   ${c3}(___()${n}'${c3}\`;   $c3$b WM$n        $(wm)
+	   ${c3}/${n},    ${c3}/${c4}\`    $c4$b KERNEL$n    $(kernel)
+	   ${c3}\\\\${c2}"--${c3}\\\\     $c5$b SHELL$n     $(shell)
+	               $c6$b UPTIME$n    $(up)
 
 	EOF
 }
