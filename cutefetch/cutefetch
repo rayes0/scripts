@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# cutefetch
+# cutefetch by rayes
 # https://github.com/rayes0/cutefetch
 # A cute and minimal fetch script that can display different animals
 
@@ -21,6 +21,7 @@ print_help() {
 	Avaliable animals:
 	 bunny
 	 kitten
+	 puppy
 	 owl
 	 fish
 	 pika
@@ -197,6 +198,18 @@ pika() {
 	                  $c6$b UPTIME$n    $(up)
 	EOF
 }
+puppy() {
+	$cmd <<-EOF
+	 $c4$b USER$c6 ~ $n$(user)  $c4$b HOSTNAME$c6 ~ $n$(name)
+	  $n$line
+	  ${c3}     __     ${c2}$b OS$n        $(os)
+	  ${c3}(___()${n}'${c3}\`;   $c3$b WM$n        $(wm)
+	  ${c3}/${n},    ${c3}/${c4}\`    $c4$b KERNEL$n    $(kernel)
+	  ${c3}\\\\${c2}"--${c3}\\\\     $c5$b SHELL$n     $(shell)
+		              $c6$b UPTIME$n    $(up)
+
+	EOF
+}
 
 # Run functions
 tput rmam
@@ -216,10 +229,12 @@ case $1 in
 		fish ;;
 	pika)
 		pika ;;
+	puppy)
+		puppy ;;
 	none)
 		none ;;
 	random)
-		animals=(bunny kitten owl fish)
+		animals=(bunny kitten owl fish pika puppy)
 		
 		num=${#animals[@]}
 		chosen=$(($RANDOM % $num))

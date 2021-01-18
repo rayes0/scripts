@@ -20,6 +20,7 @@ Defaults to bunny if no animal specified.
 Avaliable animals:
  bunny
  kitten
+ puppy
  owl
  fish
  pika
@@ -33,7 +34,7 @@ Options:
 
 ## Configuration
 
-The default behaviour of cutefetch can be configured with the environment variables. You may declare these either in a file run by bash on startup (eg: `~/.bashrc`), or manually using `export VARIABLE=VALUE`.
+The default behaviour of cutefetch can be configured with environment variables. You may declare these either in a file run by bash on startup (eg: `~/.bashrc`), or manually using `export VARIABLE=VALUE`.
 
 ### Variables
 
