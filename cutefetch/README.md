@@ -7,7 +7,7 @@ cutefetch is a cute and minimal system information tool written in bash. Similar
 
 ## Install
 
-cutefetch is just a bash script. To install it, just grab the file and put it somewhere in your `$PATH`.
+cutefetch is just a bash script. To install it, just download the file (eg: `wget https://github.com/rayes0/scripts/raw/main/cutefetch/cutefetch`) and put it somewhere in your `$PATH`.
 
 ## Usage
 
