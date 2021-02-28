@@ -35,17 +35,17 @@ def get_quotes( url ):
             }
 
             python_list.append(python_dic)
-
-            print("Adding quote from {}".format(author))
             increment()
     except:
         print("{} is not working".format(url))
 
 
 if __name__ == '__main__':
-    for i in range(1, 431):
+    print("Connection established. Grabbing quotes...")
+    for i in range(1, 432):
         get_quotes(base_url + str(i))
+        print("Done page "+str(i)+"/431")
 
-    print("Finished grabbing", len(python_list), "quotes")
+    print("\nFinished grabbing",len(python_list),"quotes")
 
     write_to_json(python_list)
