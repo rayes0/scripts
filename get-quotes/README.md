@@ -16,7 +16,7 @@ The quotes are stored in a json file named `quotes.json` in the following format
 ]
 ```
 
-`id` is an integer incremented by 1, providing a unique identifier for retrieving quotes for other applications.
+`id` is an one-based integer, providing a unique identifier for retrieving quotes for other applications.
 
 Note that the `quotes.json` file will be *overriden* each time one of the scripts are run. Make sure to move or rename the file if you want to keep the quotes.
 
