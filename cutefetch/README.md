@@ -50,6 +50,12 @@ CF_MONOCHROME=false
 # Valid: true|false
 CF_BOLD=true
 
+# Whether or not to use italic for info text (default: false)
+CF_ITALIC=(true|false)
+
+# Whether or not to use italic for label text (default: false)
+CF_ITALIC_LABELS=(true|false)
+
 # Whether or not to display a title line containing the name of the current user and hostname (default:true)
 # Valid: true|false
 CF_TITLE=true

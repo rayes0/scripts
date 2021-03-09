@@ -49,6 +49,12 @@ print_config() {
 	CF_BOLD=(true|false)
 	  Whether or not to use bold for label text (default: true)
 	
+	CF_ITALIC=(true|false)
+	  Whether or not to use italic for info text (default: false)
+	
+	CF_ITALIC_LABELS=(true|false)
+	  Whether or not to use italic for label text (default: false)
+	
 	CF_TITLE=(true|false)
 	  Whether or not to display a title line (default: true)
 
@@ -69,10 +75,10 @@ kernel() {
 }
 wm() {
 	if [[ -O "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" ]]; then
-        	if tmp_pid="$(lsof -t "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)" ||
-        		tmp_pid="$(fuser   "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)"; then
-        		echo "$(ps -p "${tmp_pid}" -ho comm=)"
-        	else
+        if tmp_pid="$(lsof -t "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)" ||
+        	tmp_pid="$(fuser   "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)"; then
+        	echo "$(ps -p "${tmp_pid}" -ho comm=)"
+        else
 			wm=$(ps "${ps_flags[@]}" | grep -m 1 -o -F \
                                -e arcan \
                                -e asc \
@@ -136,10 +142,12 @@ fi
 # Colors and formatting
 n=$'\033[0m' # Normal text
 
-BOLD="${CF_BOLD:-true}"
-if [ "$BOLD" = 'true' ]; then
-	b=$'\033[1m' # Bold text
-fi
+b=""
+l=""
+s=""
+[ "${CF_BOLD:-true}" = 'true' ] && b=$'\033[1m' # Bold text
+[ "${CF_ITALIC:-false}" = 'true' ] && l=$'\033[3m' # Italic text
+[ "${CF_ITALIC_LABELS:-false}" = 'true' ] && s=$'\033[3m' # Label Italic text
 
 MONOCHROME="${CF_MONOCHROME:-false}"
 if [ "$MONOCHROME" = 'false' ]; then
@@ -193,87 +201,87 @@ fi
 # Animals
 none() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}${s} $usr$c6 ~ $n$l$(user)$n  $c4${b}${s} $hostnml$c6 ~ $n$l$(name)$n
 	   $c5$line
-	  $c2$b $osl$n        $(os)
-	  $c3$b $wml$n        $(wm)
-	  $c4$b $kernl$n    $(kernel)
-	  $c5$b $lshell$n     $(shell)
-	  $c6$b $utime$n    $(up)
+	  $c2${b}${s} $osl$n        $l$(os)$n
+	  $c3${b}${s} $wml$n        $l$(wm)$n
+	  $c4${b}${s} $kernl$n    $l$(kernel)$n
+	  $c5${b}${s} $lshell$n     $l$(shell)$n
+	  $c6${b}${s} $utime$n    $l$(up)$n
 
 	EOF
 }
 bunny() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}$s $usr$c6 ~ $n$l$(user)$n  $c4${b}$s $hostnml$c6 ~ $n$l$(name)$n
 	   $c5$line
-	             $c2$b $osl$n        $(os)
-	   (\\ /)     $c3$b $wml$n        $(wm)
-	   ( . .)    $c4$b $kernl$n    $(kernel)
-	   c$n($c4"$n)($c4"$n)   $c5$b $lshell$n     $(shell)
-	             $c6$b $utime$n    $(up)
+	             $c2${b}$s $osl$n        ${l}$(os)$n
+	   (\\ /)     $c3${b}$s $wml$n        ${l}$(wm)$n
+	   ( . .)    $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	   c$n($c4"$n)($c4"$n)   $c5${b}$s $lshell$n     ${l}$(shell)$n
+	             $c6${b}$s $utime$n    ${l}$(up)$n
 
 	EOF
 }
 kitten() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
-	                $c2$b $osl$n        $(os)
-	    ${c4}\\ $n   /\\     $c3$b $wml$n        $(wm)
-	    ${c4} )$n  ( ')    $c4$b $kernl$n    $(kernel)
-	    ${c4}( $n /  )     $c5$b $lshell$n     $(shell)
-	    ${c4} \\$n(__)$c4\\     $c6$b $utime$n    $(up)
+	                $c2${b}$s $osl$n        ${l}$(os)$n
+	    ${c4}\\ $n   /\\     $c3${b}$s $wml$n        ${l}$(wm)$n
+	    ${c4} )$n  ( ')    $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	    ${c4}( $n /  )     $c5${b}$s $lshell$n     ${l}$(shell)$n
+	    ${c4} \\$n(__)$c4\\     $c6${b}$s $utime$n    ${l}$(up)$n
 
 	EOF
 }
 owl() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
-	                  $c2$b $osl$n        $(os)
-	      ${c4}.___,       $c3$b $wml$n        $(wm)
-	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4$b $kernl$n    $(kernel)
-	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5$b $lshell$n     $(shell)
-	       ${c4}^ ^        $c6$b $utime$n    $(up)
+	                  $c2${b}$s $osl$n        ${l}$(os)$n
+	      ${c4}.___,       $c3${b}$s $wml$n        ${l}$(wm)$n
+	   ${c3}___(${n}'${c3}v${n}'${c3})___    $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	   ${c2}\`"-\\${n}._.${c2}/-"'    $c5${b}$s $lshell$n     ${l}$(shell)$n
+	       ${c4}^ ^        $c6${b}$s $utime$n    ${l}$(up)$n
 
 	EOF
 }
 fish() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
 
-	     ${c4}\\ ${n}  '  o       $c2$b $osl$n        $(os)
-	     ${c4}/\\    \\ ${n} '     $c3$b $wml$n        $(wm)
-	   ${c3}>=)'${c4}>   /${c4}\\ ${n}  ~   $c4$b $kernl$n    $(kernel)
-	     ${c4}\\/ ${c3} >=)'${c4}>      $c5$b $lshell$n     $(shell)
-	   ' ${c4}/     \\${c4}/       $c6$b $utime$n    $(up)
+	     ${c4}\\ ${n}  '  o       $c2${b}$s $osl$n        ${l}$(os)$n
+	     ${c4}/\\    \\ ${n} '     $c3${b}$s $wml$n        ${l}$(wm)$n
+	   ${c3}>=)'${c4}>   /${c4}\\ ${n}  ~   $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	     ${c4}\\/ ${c3} >=)'${c4}>      $c5${b}$s $lshell$n     ${l}$(shell)$n
+	   ' ${c4}/     \\${c4}/       $c6${b}$s $utime$n    ${l}$(up)$n
 	       o ${c4}  / ${n}  '
 
 	EOF
 }
 pika() {
 	$cmd <<-EOF
-	  $c4$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
 
-	   ${c2}(\\___/) ${c3}/___7   $c2$b $osl$n        $(os)
-	   ${c2}(${c5}o${n}^_^${c5}o${c2}) ${c3}Z__7    $c3$b $wml$n        $(wm)
-	    ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4$b $kernl$n    $(kernel)
-	    ${c2}(/ \\)          $c5$b $lshell$n     $(shell)
-	                   $c6$b $utime$n    $(up)
+	   ${c2}(\\___/) ${c3}/___7   $c2${b}$s $osl$n        ${l}$(os)$n
+	   ${c2}(${c5}o${n}^_^${c5}o${c2}) ${c3}Z__7    $c3${b}$s $wml$n        ${l}$(wm)$n
+	    ${c2}(${c3}"${n}_${c3}"${c2})${c3}=Z_7      $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	    ${c2}(/ \\)          $c5${b}$s $lshell$n     ${l}$(shell)$n
+	                   $c6${b}$s $utime$n    ${l}$(up)$n
 	EOF
 }
 puppy() {
 	$cmd <<-EOF
-	  $c5$b $usr$c6 ~ $n$(user)  $c4$b $hostnml$c6 ~ $n$(name)
+	  $c5${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $n$line
-	   ${c3}     __     ${c2}$b $osl$n        $(os)
-	   ${c3}(___()${n}'${c3}\`;   $c3$b $wml$n        $(wm)
-	   ${c3}/${n},    ${c3}/${c4}\`    $c4$b $kernl$n    $(kernel)
-	   ${c3}\\\\${c2}"--${c3}\\\\     $c5$b $lshell$n     $(shell)
-	               $c6$b $utime$n    $(up)
+	   ${c3}     __     ${c2}${b}$s $osl$n        ${l}$(os)$n
+	   ${c3}(___()${n}'${c3}\`;   $c3${b}$s $wml$n        ${l}$(wm)$n
+	   ${c3}/${n},    ${c3}/${c4}\`    $c4${b}$s $kernl$n    ${l}$(kernel)$n
+	   ${c3}\\\\${c2}"--${c3}\\\\     $c5${b}$s $lshell$n     ${l}$(shell)$n
+	               $c6${b}$s $utime$n    ${l}$(up)$n
 
 	EOF
 }
@@ -308,8 +316,7 @@ case $1 in
 		${animals[$chosen]}
 		;;
 	"")
-		DEFANIMAL=${CF_DEFAULT_ANIMAL:-bunny}
-		$DEFANIMAL ;;
+		${CF_DEFAULT_ANIMAL:-bunny} ;;
 	*)
 		cat <<-EOF
 		Invalid animal. See 'cutefetch -h' for help.
