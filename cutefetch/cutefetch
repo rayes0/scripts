@@ -74,6 +74,7 @@ kernel() {
 	uname -r
 }
 wm() {
+    # Waylad stuff is stolen from neofetch
 	if [[ -O "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" ]]; then
         if tmp_pid="$(lsof -t "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)" ||
         	tmp_pid="$(fuser   "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)"; then
@@ -122,7 +123,7 @@ name() {
 	hostname
 }
 
-# Uptime, support for Mac and Linux, modified from https://gist.github.com/ioagel/7f72863b40ed3d7c3b1d60a4d1a081c1
+# Uptime, modified from https://gist.github.com/ioagel/7f72863b40ed3d7c3b1d60a4d1a081c1
 uptime -p >/dev/null 2>&1
 if [ "$?" -eq 0 ]; then
 	UP_SET_OR_EMPTY=$(uptime -p | awk -F 'up ' '{print $2}')
@@ -249,7 +250,7 @@ owl() {
 }
 fish() {
 	$cmd <<-EOF
-	  $c4${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
 
 	     ${c4}\\ ${n}  '  o       $c2${b}$s $osl$n        ${l}$(os)$n
@@ -263,7 +264,7 @@ fish() {
 }
 pika() {
 	$cmd <<-EOF
-	  $c4${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
+	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
 
 	   ${c2}(\\___/) ${c3}/___7   $c2${b}$s $osl$n        ${l}$(os)$n
@@ -275,7 +276,7 @@ pika() {
 }
 puppy() {
 	$cmd <<-EOF
-	  $c5${b}$s $usr$c6 ~ $n${l}$(user)  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
+	  $c5${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $n$line
 	   ${c3}     __     ${c2}${b}$s $osl$n        ${l}$(os)$n
 	   ${c3}(___()${n}'${c3}\`;   $c3${b}$s $wml$n        ${l}$(wm)$n
