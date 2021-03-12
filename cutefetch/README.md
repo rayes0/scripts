@@ -42,12 +42,10 @@ The default behaviour of cutefetch can be configured with environment variables.
 CF_DEFAULT_ANIMAL=bunny
 
 # Renders output with only the fg and bg colors (default: false)
-# Valid: true|false
-CF_MONOCHROME=false
+CF_MONOCHROME=(true|false)
 
 # Whether or not to use bold for label text (default: true)
-# Valid: true|false
-CF_BOLD=true
+CF_BOLD=(true|false)
 
 # Whether or not to use italic for info text (default: false)
 CF_ITALIC=(true|false)
@@ -56,12 +54,10 @@ CF_ITALIC=(true|false)
 CF_ITALIC_LABELS=(true|false)
 
 # Whether or not to display a title line containing the name of the current user and hostname (default:true)
-# Valid: true|false
-CF_TITLE=true
+CF_TITLE=(true|false)
 
 # Settings regarding whether labels are displayed in uppercase, lowercase, or titlecase (default:upper)
-# Valid: upper|lower|title
-CF_LABELS=upper
+CF_LABELS=(upper|lower|title)
 ```
 
 ## Inspiration
