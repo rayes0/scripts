@@ -29,6 +29,7 @@ Avaliable animals:
 Options:
  -h, --help, help          Print this message
  -c, --config, config      Print configuration options
+ -s, --screenshot-mode     Clear the screen and hide the cursor before printing, useful for screenshots
 ```
 
 ## Configuration
@@ -63,5 +64,5 @@ CF_LABELS=(upper|lower|title)
 ## Inspiration
 
 - ![elenapan's bunnyfetch](https://github.com/elenapan/dotfiles/blob/master/bin/bunnyfetch)
-- ![Luvella's bunnyfetch](https://github.com/Luvella/Bunnyfetch)
+- ![Mewyuna's bunnyfetch](https://github.com/Mewyuna/Bunnyfetch)
 - ![neofetch](https://github.com/dylanaraps/neofetch) by dylanraps
