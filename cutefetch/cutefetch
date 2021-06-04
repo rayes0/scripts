@@ -31,9 +31,10 @@ print_help() {
 	Options:
 	 -h, --help, help          Print this message
 	 -c, --config, config      Print configuration options
+	 -s, --screenshot-mode     Clear the screen and hide the cursor before printing, useful for screenshots
 
 	EOF
-	exit 1
+	exit 0
 }
 print_config() {
 	cat <<-'EOF'
@@ -62,19 +63,39 @@ print_config() {
 	  Whether to display labels as uppercase, lowercase, or titlecase (default: upper)
 
 	EOF
-	exit 1
+	exit 0
 }
 
 # System Info
 
 os() {
-	lsb_release -sd | cut -f2 -d \"
+	if [[ -f /etc/os-release ]]; then
+	    . /etc/os-release
+	    echo "$NAME $VERSION_ID"
+	elif type lsb_release >/dev/null 2>&1; then
+		echo "$(lsb_release -si) $(lsb_release -sr)"
+	elif [[ -f /etc/lsb-release ]]; then
+	    . /etc/lsb-release
+	    echo "$DISTRIB_ID $DISTRIB_RELEASE"
+	elif [[ -f /etc/debian_version ]]; then
+	    echo "Debian (cat /etc/debian_version)"
+	elif [[ -f /etc/redhat-release ]]; then
+		. /etc/redhat-release
+	    echo "$NAME $VERSION_ID"
+	elif [[ -n "$(ls /etc/*-release)" ]]; then
+		for f in /etc/*-release; do
+			echo $(< "$f")
+		done
+	    echo "$NAME $VERSION_ID"
+	else # fallback to uname for some bsd folks or others who don't have it for some reason
+	    echo "$(uname -s) $(uname -r)"
+	fi
 }
 kernel() {
 	uname -r
 }
 wm() {
-    # Waylad stuff is stolen from neofetch
+    # Wayland stuff is stolen from neofetch
 	if [[ -O "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" ]]; then
         if tmp_pid="$(lsof -t "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)" ||
         	tmp_pid="$(fuser   "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY:-wayland-0}" 2>&1)"; then
@@ -124,11 +145,10 @@ name() {
 }
 
 # Uptime, modified from https://gist.github.com/ioagel/7f72863b40ed3d7c3b1d60a4d1a081c1
-uptime -p >/dev/null 2>&1
-if [ "$?" -eq 0 ]; then
+if uptime -p >/dev/null 2>&1; then
 	UP_SET_OR_EMPTY=$(uptime -p | awk -F 'up ' '{print $2}')
 	up() {
-		echo ${UP_SET_OR_EMPTY:-'less than a minute'}
+		echo "${UP_SET_OR_EMPTY:-'less than a minute'}"
 	}
 else
 	up() {
@@ -199,8 +219,33 @@ if [ "$LCASE" = 'lower' ]; then
 	utime=${utime,,}
 fi
 
+output() {
+    tput rmam
+    if [[ "$screenmode" == "clear" ]]; then
+        tput civis
+        clear
+    fi
+}
+finish() {
+	tput smam
+	tput cvvis
+	exit 0
+}
+post()  {
+    if [[ "$screenmode" == "clear" ]]; then
+		trap finish EXIT
+		unset screenmode
+        sleep infinity &
+        wait
+    else
+        tput smam
+        exit 0
+    fi
+}
+
 # Animals
 none() {
+    output
 	$cmd <<-EOF
 	  $c4${b}${s} $usr$c6 ~ $n$l$(user)$n  $c4${b}${s} $hostnml$c6 ~ $n$l$(name)$n
 	   $c5$line
@@ -213,6 +258,7 @@ none() {
 	EOF
 }
 bunny() {
+    output
 	$cmd <<-EOF
 	  $c4${b}$s $usr$c6 ~ $n$l$(user)$n  $c4${b}$s $hostnml$c6 ~ $n$l$(name)$n
 	   $c5$line
@@ -225,6 +271,7 @@ bunny() {
 	EOF
 }
 kitten() {
+    output
 	$cmd <<-EOF
 	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
@@ -237,6 +284,7 @@ kitten() {
 	EOF
 }
 owl() {
+    output
 	$cmd <<-EOF
 	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
@@ -249,6 +297,7 @@ owl() {
 	EOF
 }
 fish() {
+	output
 	$cmd <<-EOF
 	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
@@ -263,6 +312,7 @@ fish() {
 	EOF
 }
 pika() {
+	output
 	$cmd <<-EOF
 	  $c4${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $c5$line
@@ -275,6 +325,7 @@ pika() {
 	EOF
 }
 puppy() {
+	output
 	$cmd <<-EOF
 	  $c5${b}$s $usr$c6 ~ $n${l}$(user)$n  $c4${b}$s $hostnml$c6 ~ $n${l}$(name)$n
 	   $n$line
@@ -287,42 +338,53 @@ puppy() {
 	EOF
 }
 
-# Run functions
-tput rmam
-case $1 in
-	-h|--help|help)
-		print_help ;;
-	-c|--config|config)
-		print_config ;;
-	bunny)
-		bunny
-		;;
-	kitten)
-		kitten ;;
-	owl)
-		owl ;;
-	fish)
-		fish ;;
-	pika)
-		pika ;;
-	puppy)
-		puppy ;;
-	none)
-		none ;;
-	random)
-		animals=(bunny kitten owl fish pika puppy)
-		
-		num=${#animals[@]}
-		chosen=$(($RANDOM % $num))
-		${animals[$chosen]}
-		;;
-	"")
-		${CF_DEFAULT_ANIMAL:-bunny} ;;
-	*)
-		cat <<-EOF
-		Invalid animal. See 'cutefetch -h' for help.
+# Parse arguments and run functions
+[[ "$#" -eq 0 ]] && ${CF_DEFAULT_ANIMAL:-bunny} && exit 0
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--screenshot-mode)
+            screenmode=clear
+            shift
+            ;;
+	    -h|--help|help)
+	    	print_help ;;
+	    -c|--config|config)
+	    	print_config ;;
+	    bunny)
+	    	bunny
+			shift ;;
+	    kitten)
+	    	kitten
+			shift ;;
+	    owl)
+	    	owl
+			shift ;;
+	    fish)
+	    	fish
+			shift ;;
+	    pika)
+	    	pika
+			shift ;;
+	    puppy)
+	    	puppy
+			shift ;;
+	    none)
+	    	none
+			shift ;;
+	    random)
+	    	animals=(bunny kitten owl fish pika puppy)
+	    	
+	    	num=${#animals[@]}
+	    	chosen=$(($RANDOM % $num))
+	    	${animals[$chosen]}
+			shift ;;
+	    *)
+			cat <<-'EOF'
+			Invalid animal. See 'cutefetch -h' for help.
 
-		EOF
-esac
-tput smam
-
+			EOF
+			exit 1
+            ;;
+    esac
+done
+post
