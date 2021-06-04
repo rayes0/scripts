@@ -86,7 +86,6 @@ os() {
 		for f in /etc/*-release; do
 			echo $(< "$f")
 		done
-	    echo "$NAME $VERSION_ID"
 	else # fallback to uname for some bsd folks or others who don't have it for some reason
 	    echo "$(uname -s) $(uname -r)"
 	fi
