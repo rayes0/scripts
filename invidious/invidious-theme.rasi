@@ -1,0 +1,58 @@
+configuration {
+	location: 0;
+	yoffset: 0;
+	xoffset: 0;
+	fullscreen: false;
+	sidebar-mode: false;
+	columns: 1;
+}
+
+* {
+	background-color: #ede6e3;
+	text-color: #6c605a;
+}
+
+#window {
+  children: [ mainbox, scrollbar ];
+	background-color: #ede6e3;
+	width: 50%;
+	height: 50%;
+	padding: 30px;
+}
+
+#scrollbar {
+  width: 4px ;
+  border: 0;
+  handle-color: #6c605a;
+  handle-width: 8px ;
+  padding: 0;
+}
+
+#inputbar {
+	children: [ prompt, textbox-prompt-colon, entry ];
+	margin: 8px;
+}
+
+#prompt {
+  border-radius: 5px;
+  background-color: #dad3d0;
+	padding: 10px;
+}
+
+#entry {
+	padding: 10px;
+}
+
+#textbox-prompt-colon {
+	expand: false;
+	padding: 0;
+}
+
+#element {
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#element.selected {
+	background-color: #dad3d0;
+}

@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# invidious client in bash
+# dependencies: curl jq rofi
+#
+# Usage: invidious [search_query]
+#
+# [search_query] is optional
+
+# the baseurl for the instance
+# doubling on slashes doesn't matter
+baseurl="https://invidious.snopyta.org"
+apiurl="${baseurl}/api/v1"
+
+themefile="invidious-theme.rasi" # rofi theme name
+
+if [[ -n $1 ]]; then
+	query="$1"
+else
+	query="$(rofi -dmenu -theme "$themefile" -P "Enter search")"
+	[[ -z $query ]] && exit 0
+fi
+query="${query// /_}"
+
+fifo="/tmp/invidious"
+mkfifo $fifo
+trap "rm  $fifo" EXIT
+
+searchurl="${apiurl}/search?q=${query}"
+echo "Getting results..."
+
+getpage() {
+	curl --progress-bar --fail --output "$fifo" "${searchurl}&page=$1" || { echo "error in fetching url: $searchurl"; rofi -dmenu -theme "$themefile" -P "error in fetching url. check terminal output for details"; exit 1; }
+	pagenum=$(( pagenum + 1 ))
+}
+
+spawnreader() {
+	# wait on pipe
+	data="$(cat $fifo)"
+
+	# we need to break this up for formatting reasons, afaik jq isn't capable of formatting how we want it, and I don't want to spawn an external awk
+	# bash has no multidimensional data structures. pain.
+	IFS=$'\n'
+	titles=($(echo "$data" | jq -r '.[] | .title'))
+	authors=($(echo "$data" | jq -r '.[] | .author'))
+	dates=($(echo "$data" | jq -r '.[] | .published | strftime("%b %d, %Y %I:%M%p %Z")'))
+	lengthsecs=($(echo "$data" | jq -r '.[] | .lengthSeconds'))
+	types=($(echo "$data" | jq -r '.[] | .type'))
+	links=($(echo "$data" | jq -r '.[] | .videoId'))
+	# jq -r ".[] | [.title, .author, .published, .lengthSeconds, .type] | @csv" "$fifo"
+
+	lengths=()
+	for secs in ${lengthsecs[@]}; do
+		lengths+=($(printf '%dh:%dm:%ds\n' $((secs/3600)) $((secs%3600/60)) $((secs%60))))
+	done
+
+	pagesize=${#titles[@]}
+	list=($(IFS=$'\n'; for (( i=0; i<$pagesize; i++ )); do
+						printf "%-30.30s | %-15.20s | %-10s | %-s | %-s\n" \
+									 "${titles[$i]}" "${authors[$i]}" "${lengths[$i]}" "${dates[$i]}" "${types[$i]}"
+					done))
+
+	declare -gA videos # globally declare
+	for (( i=0; i<$pagesize; i++ )); do
+		videos["${list[$i]}"]+="${links[$i]}"
+	done
+}
+
+rofipage() {
+	getpage $1
+	spawnreader
+
+	if [[ $1 == 1 ]]; then
+		chosen="$(printf '%s\n%s\n' "Next page" "${list[@]}" | rofi -lines $(( $pagesize + 1 )) -dmenu -theme "$themefile" -i -no-fixed-num-lines -p "[Page 1] Filter")"
+	else
+		chosen="$(printf '%s\n%s\n%s\n' "Next page" "Prev page" "${list[@]}" | rofi -lines $(( $pagesize + 2 )) -dmenu -theme "$themefile" -i -no-fixed-num-lines -p "[Page $1] Filter")"
+	fi
+}
+
+showpage() {
+	rofipage $1
+	if [[ -z "$chosen" ]]; then
+		exit 0
+	elif [[ "$chosen" == "Next page" ]]; then
+		showpage $(( $1 + 1 ))
+	elif [[ "$chosen" == "Prev page" ]]; then
+		showpage $(( $1 - 1 ))
+	fi
+}
+
+showpage 1
+
+videoid="${videos["$chosen"]}"
+videourl="${baseurl}/watch?v=${videoid}"
+echo "playing $videourl..."
+
+mpv "$videourl"
